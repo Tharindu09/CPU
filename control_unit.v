@@ -1,15 +1,16 @@
 /*
-Group 11 Lab 5 part 3
+Group 11 Lab 5 part 4
 
 */
 
 
 
-module control_unit(OPCODE,WRITE_ENABLE,ALUOP,REG2_SIGN_SEL,OP2_SEL);
+module control_unit(OPCODE,WRITE_ENABLE,ALUOP,REG2_SIGN_SEL,OP2_SEL,JUMP,BRANCH);
 
     input [7:0] OPCODE;
     output reg WRITE_ENABLE,REG2_SIGN_SEL,OP2_SEL;    //Used in procedeual block. Hence reg use
     output reg [2:0] ALUOP;
+    output reg JUMP,BRANCH;
     
 
 /*  loadi = "00000000"
@@ -17,7 +18,9 @@ module control_unit(OPCODE,WRITE_ENABLE,ALUOP,REG2_SIGN_SEL,OP2_SEL);
 	  add 	= "00000010"
 	  sub 	= "00000011"
 	  and 	= "00000100"
-	  or  	= "00000101"    */
+	  or  	= "00000101" 
+    jump  = "00000110" 
+    beq   = "00000111"  */
 
 /*  SELECT = 000 : FORWARD
     SELECT = 001 : ADD
@@ -27,6 +30,9 @@ module control_unit(OPCODE,WRITE_ENABLE,ALUOP,REG2_SIGN_SEL,OP2_SEL);
 
     always @ (OPCODE)begin
       
+      JUMP = 0;
+      BRANCH=0;
+
       case (OPCODE)
         //loadi
         8'b00000000: #1 {WRITE_ENABLE,ALUOP,REG2_SIGN_SEL,OP2_SEL} = 6'b1_000_x_1;   //OP2_SEL       = 0: Reg2 out  , 1: Immidiate value 
@@ -45,6 +51,12 @@ module control_unit(OPCODE,WRITE_ENABLE,ALUOP,REG2_SIGN_SEL,OP2_SEL);
 
         //or
         8'b00000101: #1 {WRITE_ENABLE,ALUOP,REG2_SIGN_SEL,OP2_SEL} = 6'b1_011_0_0;
+
+        //jump
+        8'b00000110: #1 {WRITE_ENABLE,ALUOP,REG2_SIGN_SEL,OP2_SEL,JUMP} = 7'b0_xxx_x_x_1;
+
+        //beq
+	      8'b00000111: #1 {WRITE_ENABLE,ALUOP,REG2_SIGN_SEL,OP2_SEL,BRANCH} = 7'b0_001_1_0_1;
 
                
       endcase
