@@ -1,7 +1,9 @@
-//This is a sample assembly program for CO224 Lab 5
-loadi 4 0x05    // r4 = 5
-loadi 2 0x09    // r2 = 9
-add 6 4 2
-sub 7 2 4
-and 3 4 2
-or 5 4 2
+loadi 1 0x02
+loadi 2 0x08
+mult 3 1 2
+sll 4 2 0x02
+srl 5 2 0x01
+sra 6 2 0x02
+ror 7 2 0x02
+bne 0x01 1 2
+
